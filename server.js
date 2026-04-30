@@ -7,14 +7,22 @@ const cors = require("cors");
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 const path = require('path');
+const mysql = require('mysql');
+const { Console } = require('console');
 
 //const spawn = require('child_process').spawn;
 
 const app = express();
-const mysql = require('mysql');
-const { Console } = require('console');
-app.use(express.static('public'));
-app.use(cors());
+app.use(cors()); // 👈 MUST be before routes
+app.use(express.json());
+
+app.get("/api/fmlib", (req, res) => {
+    res.json({ message: "CORS fixed" });
+});
+
+
+//app.use(express.static('public'));
+//app.use(cors());
 
 // Multer Configuration
 const storage = multer.diskStorage({
