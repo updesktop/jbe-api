@@ -2,6 +2,7 @@
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
+const cors = require("cors");
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -13,6 +14,7 @@ const app = express();
 const mysql = require('mysql');
 const { Console } = require('console');
 app.use(express.static('public'));
+app.use(cors());
 
 // Multer Configuration
 const storage = multer.diskStorage({
