@@ -1,0 +1,19 @@
+{
+  "name": "jbe-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "mysql": "^2.18.1",
+    "puppeteer": "^24.42.0"
+  }
+}
