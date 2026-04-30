@@ -705,6 +705,29 @@ app.get('/api/fmlib', function(req, res){
   });  
 });
 
+app.post('/api/fmlib', function(req, res){
+  let jeSQL = req.query.sql;  
+  let params = req.query.fld;  
+  let tbl = req.query.tbl;
+  let fm_mode = req.query.fm_mode;
+  
+  //console.log(fm_mode+':jeSQL:'+jeSQL);
+  //console.log('fld:'+params);
+
+  con.query(jeSQL,params,function (err, result) {
+    if (err) throw err;    
+    //else if(fm_mode==1){
+    else{
+      var jeSQL='SELECT * FROM '+tbl;    
+      //console.log('jeSQL 2:'+jeSQL);
+      con.query(jeSQL,function (err, result) {
+        if (err) throw err;    
+        else res.send(result);    
+      }); 
+    }
+  });  
+});
+
 app.get('/api/fmlib_get', function(req, res){
   let jeSQL = req.query.sql;  
   let params = req.query.fld;  
