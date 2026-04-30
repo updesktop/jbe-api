@@ -16,9 +16,11 @@ const app = express();
 app.use(cors()); // 👈 MUST be before routes
 app.use(express.json());
 
+/*
 app.get("/api/fmlib", (req, res) => {
     res.json({ message: "CORS fixed" });
 });
+*/
 
 
 //app.use(express.static('public'));
