@@ -2,29 +2,17 @@
 const express = require('express');
 const https = require('https');
 const fs = require('fs');
-const cors = require("cors");
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 const path = require('path');
-const mysql = require('mysql');
-const { Console } = require('console');
 
 //const spawn = require('child_process').spawn;
 
 const app = express();
-app.use(cors()); // 👈 MUST be before routes
-app.use(express.json());
-
-/*
-app.get("/api/fmlib", (req, res) => {
-    res.json({ message: "CORS fixed" });
-});
-*/
-
-
-//app.use(express.static('public'));
-//app.use(cors());
+const mysql = require('mysql');
+const { Console } = require('console');
+app.use(express.static('public'));
 
 // Multer Configuration
 const storage = multer.diskStorage({
@@ -39,7 +27,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-
 const { exec } = require('child_process');
 
 const fileContent = fs.readFileSync('./enadsys.json', "utf8");
@@ -49,7 +36,7 @@ var db_dbase=fileJsonContent.db_dbase;
 var db_host=fileJsonContent.db_host;
 //console.clear();
 console.log(fileJsonContent);
-
+/*
 var zcon = mysql.createConnection({
   host: 'sql100.infinityfree.com',   
   user: 'if0_41775435',
@@ -63,8 +50,8 @@ var con = mysql.createConnection({
   password: 'JqMM7WYgbS',
   database: 'sql12824640'
 });
-
-var xcon = mysql.createConnection({
+*/
+var con = mysql.createConnection({
   host: db_ip,   
   user: 'root',
   password: '',
@@ -680,8 +667,6 @@ app.put('/api/upd_loc_stock', function (req, res) {
 
 //========================================================================================================
 //======FM_LIB==================================================================================================
-//========================================================================================================
-
 app.get('/api/fmlib', function(req, res){
   let jeSQL = req.query.sql;  
   let params = req.query.fld;  
@@ -704,7 +689,6 @@ app.get('/api/fmlib', function(req, res){
     }
   });  
 });
-
 app.post('/api/fmlib', function(req, res){
   let jeSQL = req.query.sql;  
   let params = req.query.fld;  
@@ -727,7 +711,51 @@ app.post('/api/fmlib', function(req, res){
     }
   });  
 });
+app.put('/api/fmlib', function(req, res){
+  let jeSQL = req.query.sql;  
+  let params = req.query.fld;  
+  let tbl = req.query.tbl;
+  let fm_mode = req.query.fm_mode;
+  
+  //console.log(fm_mode+':jeSQL:'+jeSQL);
+  //console.log('fld:'+params);
 
+  con.query(jeSQL,params,function (err, result) {
+    if (err) throw err;    
+    //else if(fm_mode==1){
+    else{
+      var jeSQL='SELECT * FROM '+tbl;    
+      //console.log('jeSQL 2:'+jeSQL);
+      con.query(jeSQL,function (err, result) {
+        if (err) throw err;    
+        else res.send(result);    
+      }); 
+    }
+  });  
+});
+app.delete('/api/fmlib', function(req, res){
+  let jeSQL = req.query.sql;  
+  let params = req.query.fld;  
+  let tbl = req.query.tbl;
+  let fm_mode = req.query.fm_mode;
+  
+  //console.log(fm_mode+':jeSQL:'+jeSQL);
+  //console.log('fld:'+params);
+
+  con.query(jeSQL,params,function (err, result) {
+    if (err) throw err;    
+    //else if(fm_mode==1){
+    else{
+      var jeSQL='SELECT * FROM '+tbl;    
+      //console.log('jeSQL 2:'+jeSQL);
+      con.query(jeSQL,function (err, result) {
+        if (err) throw err;    
+        else res.send(result);    
+      }); 
+    }
+  });  
+});
+//========================================================================================================
 app.get('/api/fmlib_get', function(req, res){
   let jeSQL = req.query.sql;  
   let params = req.query.fld;  
@@ -864,16 +892,12 @@ app.delete('/del_user', function (req, res) {
    res.send('Hello DELETE');
 });
 
-app.get("/", (req, res) => {
-    res.send("JBE-API is running");
-});
-
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 var server = app.listen(db_host, function () {
   var host = server.address().address
   var port = server.address().port
-  console.log("JBE-API listening at http://%s:%s", host, port)
+  console.log("App listening at http://%s:%s", host, port)
 });
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
